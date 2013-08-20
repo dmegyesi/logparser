@@ -98,7 +98,7 @@ function stripheader {
 
   if [ ! -e $LOGSTORE/$1 ]; then
 
-    tail -n +35 $MAILDIR/$1 | grep "DHCPS" > $LOGSTORE/$1
+    tail -n +35 $MAILDIR/$1 | grep -e "DHCPS.*from" > $LOGSTORE/$1
     echo "Strip header: $1 -> LOGSTORE"
 
   else
@@ -178,18 +178,16 @@ else
 
   else
 
-    echo "There's a new file."
-
-
     # Check if the 2nd newest file is the same we processed the last time: 
     
     if [[ ${NEWEST[1]} == $LAST ]]; then
 
+      echo "There's a new file."
       # Only need to process the new one:
 
       stripheader ${NEWEST[0]}
 
-      diffit ${NEWEST[0]} ${NEWEST[1]}
+      diffit ${NEWEST[1]} ${NEWEST[0]}
 
     else
 
