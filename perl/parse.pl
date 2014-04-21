@@ -93,7 +93,7 @@ sub parse {
     if ($dumpToFile) {
 
       my $filename = "$dumpName.dat";
-      store {$sentTime, $wanIP, %$data}, $filename;
+      store {%$data}, $filename;
       print "Dump -> $filename\n";
 
     } else {
