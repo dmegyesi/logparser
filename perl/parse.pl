@@ -68,6 +68,7 @@ sub parse {
     # Line: # Time = 2014-02-19 21:12:32 3380638s
     if (/^#\sTime\s=\s(\d{4}-\d{2}-\d{2}\s+\d{1,2}:\d{2}:\d{2})\s.*$/) {
       $sentTime = Time::Piece->strptime($1, "%Y-%m-%d %T");
+      $year = $sentTime->year;
     }
 
     # Line: # W1 = DHCP : W = 80.98.239.121 : M = 255.255.255.0 : G = 80.98.239.254
@@ -93,7 +94,7 @@ sub parse {
     if ($dumpToFile) {
 
       my $filename = "$dumpName.dat";
-      store {%$data}, $filename;
+      store $data, $filename;
       print "Dump -> $filename\n";
 
     } else {

@@ -18,15 +18,16 @@ opendir(my $dh, $dirname) || die "Can't open directory: $dirname\n";
 my @files = grep { /^\d.*/ } sort {$a cmp $b} readdir $dh;
 
 my $storeFile = $ARGV[1] ? $ARGV[1] : "store.dat";
-my $bigStorage;
+my $bigStorage = {};
 
 
-if (!-e $storeFile) { push @{$bigStorage->{""}}, [""]; }
+if (!-e $storeFile) { #push @{$bigStorage->{""}}, [""]; }
+}
 else {
   $bigStorage = retrieve $storeFile;
 }
 
-delete $bigStorage->{""}; # only needed to create the hashref
+#delete $bigStorage->{""}; # only needed to create the hashref
 
 my $t_last = new Benchmark;
 
@@ -63,13 +64,15 @@ sub readDump {
   $data = retrieve $filename;
 
   for my $x (keys($data)) {
-    for my $y (keys($data->{$x})) {
-      push @{$bigStorage->{$x}}, @{$data->{$x}};
+    for my $y (@{$data->{$x}}) {
+      push @{$bigStorage->{$x}}, $y; 
     }
   }
 
   for my $key (keys $bigStorage) {
-    print "$key -> ", scalar keys $bigStorage->{$key}, " records\n";
+    print "$key -> ", scalar  @{$bigStorage->{$key}}, " records\n";
   }
 }
 
+
+1;
